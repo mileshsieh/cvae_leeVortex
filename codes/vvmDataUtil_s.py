@@ -23,6 +23,8 @@ varFn={'qc':'%s.L.Thermodynamic-%06d.nc',
        'v':'%s.L.Dynamic-%06d.nc',
        'w':'%s.L.Dynamic-%06d.nc',
        'zeta':'%s.L.Dynamic-%06d.nc',
+       'NO2':'%s.L.Chemicals-%06d.nc',
+       'NO':'%s.L.Chemicals-%06d.nc',
        'tr01':'%s.L.Tracer-%06d.nc',
        'tr02':'%s.L.Tracer-%06d.nc',
        'tr03':'%s.L.Tracer-%06d.nc',
@@ -137,6 +139,15 @@ def calcPseAbd(lwp):
   tau=0.19*np.power(lwp,5.0/6.0)*np.power(50.0,1.0/3.0)
   pseudoAlbedo=tau/(tau+6.8)
   return pseudoAlbedo
+
+def getVarSfcOnTime(dataDir,case,var,topo,tt):
+  idx_topo=topo.astype(int)
+  idx_topo[idx_topo==0]=1
+  ny,nx=topo.shape
+  x2d,y2d=np.meshgrid(np.arange(nx),np.arange(ny))
+  varData=getData(dataDir,var,case,tt)
+  result=varData[idx_topo,y2d,x2d]
+  return result
 
 def getSfcWind_intp(dataDir,case,tp,utp,vtp,tt,s):
   topo=tp.copy()
